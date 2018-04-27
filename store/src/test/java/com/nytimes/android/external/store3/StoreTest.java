@@ -2,6 +2,7 @@ package com.nytimes.android.external.store3;
 
 import com.nytimes.android.external.cache3.Cache;
 import com.nytimes.android.external.cache3.CacheBuilder;
+import com.nytimes.android.external.cache3.UncheckedExecutionException;
 import com.nytimes.android.external.store.util.Result;
 import com.nytimes.android.external.store3.base.Fetcher;
 import com.nytimes.android.external.store3.base.Persister;
@@ -286,5 +287,22 @@ public class StoreTest {
 
         value = cache.getIfPresent(new BarCode(barCode.getType(), barCode.getKey()));
         assertThat(value).isEqualTo(MEMORY);
+    }
+
+    @Test(expected = UncheckedExecutionException.class)
+    @SuppressWarnings("CheckReturnValue")
+    public void testGettingNotPutValueWillThrowException() {
+        RealStore<String, BarCode> simpleStore = new SampleStore(fetcher, persister);
+        assertThat(persister.read(barCode)).isNull();
+        simpleStore.get(barCode).blockingGet();
+    }
+
+    @Test
+    public void testRetrievingPutValueWillReturnItFromMemoryCacheAndPersisterWillNotBeChanged() {
+        RealStore<String, BarCode> simpleStore = new SampleStore(fetcher, persister);
+        String theStringPutIntoTheStore = "myString";
+        simpleStore.put(barCode, theStringPutIntoTheStore);
+        assertThat(simpleStore.get(barCode).blockingGet()).isEqualTo(theStringPutIntoTheStore);
+        assertThat(persister.read(barCode)).isNull();
     }
 }

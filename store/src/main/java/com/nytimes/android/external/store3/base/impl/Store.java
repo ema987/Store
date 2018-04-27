@@ -96,4 +96,10 @@ public interface Store<T, V> {
      * Persister will only be cleared if they implements Clearable
      */
     void clear(@Nonnull V key);
+
+    /**
+     * Puts a value into the store
+     */
+    void put(@Nonnull V key, @Nonnull T value);
+
 }
