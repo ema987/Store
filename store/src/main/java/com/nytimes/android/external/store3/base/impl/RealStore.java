@@ -150,4 +150,9 @@ public class RealStore<Parsed, Key> implements Store<Parsed, Key> {
         return internalStore.disk(key);
     }
 
+    @Override
+    public void put(@Nonnull Key key, @Nonnull Parsed value) {
+        internalStore.put(key, value);
+    }
+
 }

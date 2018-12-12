@@ -300,6 +300,16 @@ final class RealInternalStore<Raw, Parsed, Key> implements InternalStore<Parsed,
         notifyRefresh(key);
     }
 
+    @SuppressWarnings("CheckReturnValue")
+    @Override
+    public void put(@Nonnull Key key, @Nonnull Parsed value) {
+        updateMemory(key, value);
+        if (stalePolicy == StalePolicy.REFRESH_ON_STALE
+                && StoreUtil.persisterIsStale(key, persister)) {
+            backfillCache(key);
+        }
+    }
+
     private void notifyRefresh(@Nonnull Key key) {
         refreshSubject.onNext(key);
     }
