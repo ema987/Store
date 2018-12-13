@@ -102,4 +102,8 @@ public interface Store<T, V> {
      */
     void put(@Nonnull V key, @Nonnull T value);
 
+    /**
+     * Returns true if key is present
+     */
+    boolean hasKey(@Nonnull V key);
 }
