@@ -310,6 +310,11 @@ final class RealInternalStore<Raw, Parsed, Key> implements InternalStore<Parsed,
         }
     }
 
+    @Override
+    public boolean hasKey(@Nonnull Key key) {
+        return memCache.asMap().containsKey(key);
+    }
+
     private void notifyRefresh(@Nonnull Key key) {
         refreshSubject.onNext(key);
     }

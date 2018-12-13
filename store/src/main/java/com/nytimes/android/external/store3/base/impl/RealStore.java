@@ -155,4 +155,9 @@ public class RealStore<Parsed, Key> implements Store<Parsed, Key> {
         internalStore.put(key, value);
     }
 
+    @Override
+    public boolean hasKey(@Nonnull Key key) {
+        return internalStore.hasKey(key);
+    }
+
 }
